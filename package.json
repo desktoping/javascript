@@ -4,7 +4,8 @@
   "description": "all javascript tricks that i learned throughout my journey",
   "main": "index.js",
   "scripts": {
-    "es6:export-import": "./node_modules/.bin/babel-node ./es6/export-import/import.js"
+    "es6:export-import": "./node_modules/.bin/babel-node ./es6/export-import/import.js",
+    "es6:const-let": "./node_modules/.bin/babel-node ./es6/const-let/index.js"
   },
   "repository": {
     "type": "git",
