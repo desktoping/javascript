@@ -6,7 +6,8 @@
   "scripts": {
     "es6:export-import": "./node_modules/.bin/babel-node ./es6/export-import/import.js",
     "es6:const-let": "./node_modules/.bin/babel-node ./es6/const-let",
-    "mp:calculator": "node ./mini-projects/calculator-cli"
+    "mp:calculator": "node ./mini-projects/calculator-cli",
+    "mp:tictac": "./node_modules/.bin/babel-node ./mini-projects/tic-tac-toe-cli"
   },
   "repository": {
     "type": "git",
@@ -23,6 +24,7 @@
     "babel-preset-stage-0": "^6.24.1"
   },
   "dependencies": {
-    "babel-cli": "^6.26.0"
+    "babel-cli": "^6.26.0",
+    "prompt": "^1.0.0"
   }
 }
