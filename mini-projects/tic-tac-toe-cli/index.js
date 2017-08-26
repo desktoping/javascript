@@ -1,64 +1,75 @@
+import kp from 'keypress'
 import {
-  startPrompt,
-  startGame,
-  createBoard
+  titleScreen
+} from './const'
+
+import {
+  // drawGame,
+  drawSignPicker,
+  clearTerminal,
+  chooseSignX,
+  chooseSignO
 } from './helpers'
 
-let playerOneSign // player
-let playerTwoSign // bot
+// initialLoad is true when the application starts
+// and is false after enter key is pressed
+let initialLoad = true
 
-// init
-startPrompt()
-createBoard()
-startGame()
+// signPicking is the next step after starting the game
+let signPicking
 
-// const askMove = () => {
-//   prompt.get([promptMessage], (err, res) => {
-//     if (err) process.exit(0)
-//     if (res[promptMessage] < 1 || res[promptMessage] > 9) {
-//       console.log('Invalid move, enter from 1 to 9')
-//       return askMove()
-//     } else {
-//       // console.log('Your move: ' + res[promptMessage])
-//       const isValid = board.handleMove(res[promptMessage], 'O')
-//       if (isValid) {
-//         checkWinner('[O]')
-//         console.log('Opponents turn...')
-//         board.handleAiMove()
-//         checkWinner('[X]')
-//       }
-//       askMove()
-//     }
-//   })
-// }
+// if both initialLoad and signPicking is false
+// game is commencing
 
+// make `process.stdin` begin emitting "keypress" events 
+kp(process.stdin)
 
-// const startGame = () => {
-//   board.displayBoard()
-//   askMove()
-// }
+// listen for the "keypress" event 
+process.stdin.on('keypress', function (ch, key) {
+  // global keypress listener
+  if (key && (key.name === 'escape' || key.ctrl && key.name == 'c')) {
+    console.log('Thank you')
+    process.exit(0)
+  }
+  
+  // handle keypresses on start up screen phase
+  if (initialLoad) {
+    // accept return key only
+    if (key && key.name === 'return') {
+      initialLoad = false
+      signPicking = true
+      chooseSignX()
+      drawSignPicker()
+    }
+  // handle keypresses on sign picking phase
+  } else if (signPicking) {
+    // left and right arrow keys = navigate
+    // space = pick
+    if (key) {
+      switch (key.name) {
+        case 'left':
+          chooseSignX()
+          break
+        case 'right':
+          chooseSignO()
+          break
+        case 'space':
+          signPicking = false
+          // draw the game
+          break
+        default:
+      }
+      drawSignPicker()
+    }
 
-// const selectSign = (cb) => {
-//   askUser(prompt, signSelectMessage, (err, res) => {
-//     if (err) process.exit(0)
-//     if (res[signSelectMessage] > 2 || res[signSelectMessage] < 1) {
-//       cb('Invalid selection, please choose from 1 or 2')
-//     } else {
-//       cb(null, signs[parseInt(res[signSelectMessage]) - 1])
-//     }
-//   })
-// }
-
-
-// const signCb = (fail, success) => {
-//   if (fail) {
-//     console.log(fail)
-//     selectSign(signCb)
-//   } else {
-//     startGame()
-//   }
-// }
-// selectSign(signCb)
-
-
-process.on('SIGINIT', () => process.exit(0))
+  // handle keypresses if both phases above is not met
+  // or when the game is commencing
+  } else {
+    console.log('3rd phase keypress', key.name)
+  }
+})
+ 
+process.stdin.setRawMode(true)
+process.stdin.resume()
+clearTerminal()
+console.log(titleScreen)

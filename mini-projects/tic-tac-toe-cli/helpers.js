@@ -1,40 +1,53 @@
-import prompt from 'prompt'
-import Board from './board'
+import chalk from 'chalk'
+import { instructionText } from './const'
 
-import {
-  promptMessage,
-  signSelectMessage,
-  signs
-} from './const'
+// place here so the value can be changed without having
+// to think about sync
+let signs = [{
+  value: 'X',
+  choosen: false
+}, {
+  value: 'O',
+  choosen: false
+}]
 
-export const createBoard = () => new Board()
-export const startPrompt = () => prompt.start()
-export const checkWinner = (sign) => {
-  const winner = board.checkWinner(sign)
-  if (winner) {
-    console.log(`${winner} won!`)
-    process.exit(0)
-  }
+export const chooseSignX = () => {
+  signs = [{
+    value: 'X',
+    choosen: true
+  }, {
+    value: 'O',
+    choosen: false
+  }]
 }
 
-export const askPlayer = (message, responseHandler) => {
-  prompt.get([message], responseHandler)
+export const chooseSignO = () => {
+  signs = [{
+    value: 'X',
+    choosen: false
+  }, {
+    value: 'O',
+    choosen: true
+  }]
 }
 
-export const startGame = () => {
-  console.log(`
-    Sign selection:
-    1: O
-    2: X
-  `)
 
-  askPlayer(signSelectMessage, function cb (err, res) {
-    if (err) process.exit(0)
-    if (res[signSelectMessage] > 2 || res[signSelectMessage] < 1) {
-      console.log('Invalid selection. Please choose between 1 or 2')
-      askPlayer(signSelectMessage, cb)
-    } else {
-      console.log('selected')
-    }
-  })
+export const drawGame = (state) => {
+  console.log(chalk.black.bgWhite(instructionText))
+}
+
+export const clearTerminal = () => console.log('\x1Bc')
+
+
+export const drawSignPicker = () => {
+  clearTerminal()
+  console.log(`${chalk.black.bgWhite(instructionText)}\n`)
+  const x = signs[0].choosen ?
+    chalk.black.bgWhite(`\t\t${signs[0].value}\t\t`) :
+    chalk.white(`\t\t${signs[0].value}\t\t`)
+  const o = signs[1].choosen ?
+    chalk.black.bgWhite(`\t\t${signs[1].value}\t\t`) :
+    chalk.white(`\t\t${signs[1].value}\t\t`)
+
+  console.log(x, o)
 }
